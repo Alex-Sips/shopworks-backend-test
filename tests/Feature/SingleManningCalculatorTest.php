@@ -6,7 +6,6 @@ use DateTime;
 use DateInterval;
 use App\Models\Rota;
 use App\Models\Shift;
-use App\Models\Staff;
 use App\DTO\SingleManning;
 use App\Functions\SingleManningCalculator;
 
@@ -22,7 +21,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($startTime, $endTime, new Staff('Black', 'Widow')),
+                new Shift($startTime, $endTime, 'Black Widow'),
             ]
         );
 
@@ -45,13 +44,14 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
 
         $now = new DateTime();
         $secondShiftStartTime = $now->add(new DateInterval('PT3H'));
-        $secondShiftEndTime = $now->add(new DateInterval('PT3H'));
+        $now = new DateTime();
+        $secondShiftEndTime = $now->add(new DateInterval('PT6H'));
 
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($firstShiftStartTime, $firstShiftEndTime, new Staff('Black', 'Widow')),
-                new Shift($secondShiftStartTime, $secondShiftEndTime, new Staff('Thor', 'Odinson')),
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Black Widow'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Thor Odinson'),
             ]
         );
 
@@ -62,6 +62,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
         $singleManning = SingleManningCalculator::calculateSingleManning($rota);
 
         $this->assertEquals($expected, $singleManning);
+        $this->assertInstanceOf(SingleManning::class, $singleManning[0]);
     }
 
     /** @test */
@@ -79,8 +80,8 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($firstShiftStartTime, $firstShiftEndTime, new Staff('Gamor', 'Zen Whoberi')),
-                new Shift($secondShiftStartTime, $secondShiftEndTime, new Staff('Logan', 'Wolverine')),
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Gamor'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Logan'),
             ]
         );
 
@@ -91,6 +92,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
         $singleManning = SingleManningCalculator::calculateSingleManning($rota);
 
         $this->assertEquals($expected, $singleManning);
+        $this->assertInstanceOf(SingleManning::class, $singleManning[0]);
     }
 
     /** @test */
@@ -109,8 +111,8 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($firstShiftStartTime, $firstShiftEndTime, new Staff('Gamor', 'Zen Whoberi')),
-                new Shift($secondShiftStartTime, $secondShiftEndTime, new Staff('Logan', 'Wolverine')),
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Gamor'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Wolverine'),
             ]
         );
 
@@ -125,33 +127,62 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function blah()
+    public function when_two_staff_members_shifts_do_not_overlap_at_all_reutrns_the_correct_single_manning_minutes()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
         $firstShiftEndTime = $now->add(new DateInterval('PT2H'));
 
         $now = new DateTime();
-        $secondShiftStartTime = $now->add(new DateInterval('P1D'));
+        $secondShiftStartTime = $now->add(new DateInterval('PT3H'));
         $now = new DateTime();
-        $now->add(new DateInterval('P1D'));
-        $secondShiftEndTime = $now->add(new DateInterval('PT3H'));
+        $secondShiftEndTime = $now->add(new DateInterval('PT6H'));
 
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($firstShiftStartTime, $firstShiftEndTime, new Staff('Gamor', 'Zen Whoberi')),
-                new Shift($secondShiftStartTime, $secondShiftEndTime, new Staff('Logan', 'Wolverine')),
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Black Widow'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Thor Odinson'),
             ]
         );
 
         $expected = [
-            new SingleManning($firstShiftStartTime->format('d-m-Y'), 120),
-            new SingleManning($secondShiftStartTime->format('d-m-Y'), 180),
+            new SingleManning($firstShiftStartTime->format('d-m-Y'), 300),
         ];
 
         $singleManning = SingleManningCalculator::calculateSingleManning($rota);
 
         $this->assertEquals($expected, $singleManning);
+        $this->assertInstanceOf(SingleManning::class, $singleManning[0]);
+    }
+
+    /** @test */
+    public function when_two_staff_members_shifts_overlap_and_the_first_shift_starts_before_and_ends_after_reutrns_the_correct_single_manning_minutes()
+    {
+        $firstShiftStartTime = new DateTime();
+        $now = new DateTime();
+        $firstShiftEndTime = $now->add(new DateInterval('PT4H'));
+
+        $now = new DateTime();
+        $secondShiftStartTime = $now->add(new DateInterval('PT1H'));
+        $now = new DateTime();
+        $secondShiftEndTime = $now->add(new DateInterval('PT3H'));
+
+        $rota = new Rota(
+            new DateTime(),
+            [
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Black Widow'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Thor Odinson'),
+            ]
+        );
+
+        $expected = [
+            new SingleManning($firstShiftStartTime->format('d-m-Y'), 119),
+        ];
+
+        $singleManning = SingleManningCalculator::calculateSingleManning($rota);
+
+        $this->assertEquals($expected, $singleManning);
+        $this->assertInstanceOf(SingleManning::class, $singleManning[0]);
     }
 }

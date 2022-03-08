@@ -1,14 +1,13 @@
 <?php
 
-namespace Test\Feature;
+namespace Test\Unit;
 
 use DateTime;
 use DateInterval;
 use App\Models\Rota;
 use App\Models\Shift;
-use App\Models\Staff;
 
-class RotaTests extends \PHPUnit\Framework\TestCase
+class RotaTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
     public function a_rota_can_be_created_without_a_shift()
@@ -28,7 +27,7 @@ class RotaTests extends \PHPUnit\Framework\TestCase
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($startTime, $endTime, new Staff('Black', 'Widow')),
+                new Shift($startTime, $endTime, 'Black Widow'),
             ]
         );
 
@@ -50,8 +49,8 @@ class RotaTests extends \PHPUnit\Framework\TestCase
         $rota = new Rota(
             new DateTime(),
             [
-                new Shift($firstShiftStartTime, $firstShiftEndTime, new Staff('Black', 'Widow')),
-                new Shift($secondShiftStartTime, $secondShiftEndTime, new Staff('Thor', 'Odinson')),
+                new Shift($firstShiftStartTime, $firstShiftEndTime, 'Black Widow'),
+                new Shift($secondShiftStartTime, $secondShiftEndTime, 'Thor Odinson'),
             ]
         );
 

@@ -1,28 +1,14 @@
 <?php
 
-namespace Test\Feature;
+namespace Test\Unit;
 
 use DateTime;
-use TypeError;
 use DateInterval;
 use App\Models\Shift;
-use App\Models\Staff;
 use InvalidArgumentException;
 
-class ShiftTests extends \PHPUnit\Framework\TestCase
+class ShiftTest extends \PHPUnit\Framework\TestCase
 {
-    /** @test */
-    public function a_shift_must_have_a_staff_member()
-    {
-        $startTime = new DateTime();
-        $now = new DateTime();
-        $endTime = $now->add(new DateInterval('PT6H'));
-
-        $this->expectException(TypeError::class);
-
-        new Shift($startTime, $endTime, null);
-    }
-
     /** @test */
     public function a_shifts_end_time_must_be_after_the_start_time()
     {
@@ -32,7 +18,7 @@ class ShiftTests extends \PHPUnit\Framework\TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        new Shift($startTime, $endTime, new Staff('Black', 'Widow'));
+        new Shift($startTime, $endTime, 'Black Widow');
     }
 
     /** @test */
@@ -42,7 +28,7 @@ class ShiftTests extends \PHPUnit\Framework\TestCase
         $now = new DateTime();
         $endTime = $now->add(new DateInterval('PT6H'));
 
-        $shift = new Shift($startTime, $endTime, new Staff('Black', 'Widow'));
+        $shift = new Shift($startTime, $endTime, 'Black Widow');
 
         $this->assertInstanceOf(Shift::class, $shift);
         $this->assertEquals($shift->dayStarted(), $startTime->format('d-m-Y'));
