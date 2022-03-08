@@ -2,6 +2,8 @@
 
 I spent roughly 6-7 hours on this. I spent about 2 hours planning, this took me a while and I couldnt figure out what was the best wat to calculate the time differences and how to deal with all the niche. I dont think the solution that i went with is the most elegent approach or the most simple given that there are going to have to be a lot of if statements in the code going down this route.
 
+I did not implement the models exactly how the migartion showed as for this exercise I did not think that Shop and Staff where needed and just had staff name on the shift rather then the model. If this was an acutal applications I would have them as relationships.
+
 I also didnt know what DTO was so i had to do some research into it, which took a bit of time. I dont think the way I have done it is correct but I decided to make it an array of SingleManning's so they can be iterated through easier rather then the array being the objects.
 
 If I had more time I would try to rewrite to solution so it does not require as many if statements as it makes to code difficult to read. I would also do more research into DTO and implement it correctly.
