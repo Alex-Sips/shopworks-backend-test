@@ -12,7 +12,7 @@ use App\Functions\SingleManningCalculator;
 class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
-    public function when_a_single_staff_member_works_a_shift_they_should_get_single_manning_time()
+    public function given_a_single_staff_member_works_a_shift_they_should_get_single_manning_time()
     {
         $startTime = new DateTime();
         $now = new DateTime();
@@ -36,7 +36,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function when_two_staff_members_work_on_the_same_day_and_dont_overlap_they_should_get_single_manning_time()
+    public function given_two_staff_members_work_on_the_same_day_and_dont_overlap_they_should_get_single_manning_time()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
@@ -66,7 +66,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function when_two_staff_members_work_on_the_same_day_and_do_overlap_it_calculates_the_correct_single_manning_time()
+    public function given_two_staff_members_work_on_the_same_day_and_do_overlap_it_calculates_the_correct_single_manning_time()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
@@ -96,7 +96,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function when_two_staff_members_work_different_day_will_return_two_single_manning_objects_for_two_days()
+    public function given_two_staff_members_work_different_day_will_return_two_single_manning_objects_for_two_days()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
@@ -127,7 +127,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function when_two_staff_members_shifts_do_not_overlap_at_all_reutrns_the_correct_single_manning_minutes()
+    public function given_two_staff_members_shifts_do_not_overlap_at_all_reutrns_the_correct_single_manning_minutes()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
@@ -157,7 +157,7 @@ class SingleManningCalculatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function when_two_staff_members_shifts_overlap_and_the_first_shift_starts_before_and_ends_after_reutrns_the_correct_single_manning_minutes()
+    public function given_two_staff_members_shifts_overlap_and_the_first_shift_starts_before_and_ends_after_reutrns_the_correct_single_manning_minutes()
     {
         $firstShiftStartTime = new DateTime();
         $now = new DateTime();
